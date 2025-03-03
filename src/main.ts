@@ -1,3 +1,4 @@
+import "./css/style.scss";
 import { Manager } from "./Manager";
 import { io, Socket } from "socket.io-client";
 
