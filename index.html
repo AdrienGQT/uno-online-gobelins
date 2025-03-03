@@ -8,19 +8,47 @@
     <link rel="stylesheet" href="src/style.css" />
   </head>
   <body>
-    <div class="lobby" id="lobby">
-      <form action="">
-        <input type="text"  name="username" id="usernameInput" />
-        <button name="join" id="joinButton">Join game</button>
-        <button name="ready" id="readyButton" disabled="disabled">Ready</button>
-      </form>
-      <ul id="playersList">
-        <li id="player">
-          <div class="playerName" id="playerName"></div>
-          <div class="playerStatus" id="playerStatus"></div>
-        </li>
-      </ul>
+    <div class="lobby__container">
+      <div class="lobby" id="lobby">
+        <form class="lobbyForm">
+          <img src="uno_logo.svg" alt="" class="lobby__logo" />
+
+          <div class="lobbyForm__up">
+            <input
+              type="text"
+              name="username"
+              id="usernameInput"
+              class="lobbyForm__username"
+              placeholder="Username"
+            />
+            <button name="join" id="joinButton" class="lobbyForm__join">
+              Join game
+            </button>
+            <h1 class="">
+              Hello
+            </h1>
+          </div>
+          <button
+            name="ready"
+            id="readyButton"
+            disabled="disabled"
+            class="lobbyForm__ready"
+          >
+            Ready
+          </button>
+        </form>
+        <div class="playersList__container">
+          <p>Players in lobby</p>
+          <ul id="playersList" class="playersList">
+            <li id="player">
+              <div class="playerName" id="playerName"></div>
+              <div class="playerStatus" id="playerStatus"></div>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

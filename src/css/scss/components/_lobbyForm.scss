@@ -1,0 +1,53 @@
+.lobbyForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 400px;
+
+  &__up {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+  }
+
+  &__username {
+    border-radius: 4px;
+    border: none;
+    padding: 16px;
+    width: 60%;
+    background-color: #f1f1f1;
+    box-sizing: border-box;
+    border: 2px solid transparent;
+    transition: all 0.1s;
+
+    &:focus {
+      outline: none;
+      stroke: none;
+      border: 2px solid rgb(205, 205, 205);
+    }
+  }
+
+  &__join {
+    border-radius: 4px;
+    width: 40%;
+    border: none;
+    background-color: #f1f1f1;
+    padding: 16px;
+
+    &:hover {
+      background-color: rgb(205, 205, 205);
+    }
+  }
+
+  &__ready {
+    border-radius: 4px;
+    border: none;
+    background-color: rgba(253, 205,3, 1);
+    padding: 16px;
+    width: 100%;
+
+    &:disabled {
+      background-color: #f1f1f1;
+    }
+  }
+}

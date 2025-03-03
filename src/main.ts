@@ -1,4 +1,4 @@
-import "./css/style.scss";
+import "./css/style.css";
 import { Manager } from "./Manager";
 import { io, Socket } from "socket.io-client";
 
