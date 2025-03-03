@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Uno Online Gobelins</title>
+    <link rel="stylesheet" href="src/style.css" />
+  </head>
+  <body>
+    <div class="lobby" id="lobby">
+      <form action="">
+        <input type="text" name="username" id="usernameInput" />
+        <button name="join" id="joinButton">Join game</button>
+        <button name="ready" id="readyButton" disabled="disabled">Ready</button>
+      </form>
+      <ul id="playersList">
+        <li id="player">
+          <div class="playerName" id="playerName"></div>
+          <div class="playerStatus" id="playerStatus"></div>
+        </li>
+      </ul>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
