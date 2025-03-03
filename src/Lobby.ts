@@ -46,6 +46,7 @@ export class Lobby {
     this.playerStatusHTML = this.playerHTML.querySelector(
       "#playerStatus"
     ) as HTMLLIElement;
+    this.playersListHTML.innerHTML = ""
 
     this.joinButton.addEventListener("click", this.joinRequest);
     this.readyButton.addEventListener("click", this.readyRequest);
@@ -107,7 +108,7 @@ export class Lobby {
   };
 
   handleUpdatePlayers = (users: object) => {
-    console.log(users)
+    console.log(users);
     this.playersListHTML.innerHTML = "";
     for (let user of Object.values(users)) {
       const playerHTMLClone = this.playerHTML.cloneNode(true) as HTMLLIElement;
@@ -118,21 +119,22 @@ export class Lobby {
         true
       ) as HTMLElement;
 
-      const playerName = user.name;
-      const playerStatus = user.isReady;
+      if (user.name) {
+        const playerName = user.name;
+        const playerStatus = user.isReady;
 
-      playerNameHTMLClone.innerHTML = playerName;
-      playerHTMLClone.appendChild(playerNameHTMLClone);
+        playerNameHTMLClone.innerHTML = playerName;
+        playerHTMLClone.appendChild(playerNameHTMLClone);
 
+        if (playerStatus) {
+          playerStatusHTMLClone.innerHTML = "Ready";
+        } else {
+          playerStatusHTMLClone.innerHTML = "Not ready";
+        }
+        playerHTMLClone.appendChild(playerStatusHTMLClone);
 
-      if (playerStatus) {
-        playerStatusHTMLClone.innerHTML = "Ready";
-      } else {
-        playerStatusHTMLClone.innerHTML = "Not ready";
+        this.playersListHTML.appendChild(playerHTMLClone);
       }
-      playerHTMLClone.appendChild(playerStatusHTMLClone);
-
-      this.playersListHTML.appendChild(playerHTMLClone);
     }
   };
 }
