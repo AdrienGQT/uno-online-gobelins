@@ -3,6 +3,8 @@ import { Player } from "./Player";
 import { Card } from "./Card";
 
 export class Game {
+  socket: Socket
+
   gameHTML: HTMLElement;
   discardCardHTML: HTMLElement;
   localPlayerHandHTML: HTMLElement;
@@ -18,6 +20,8 @@ export class Game {
   currentTurn: number = 0;
 
   constructor(gameStartData: any, socket: Socket) {
+    this.socket = socket
+
     this.gameHTML = document.querySelector("#gameHTML") as HTMLElement;
     this.discardCardHTML = this.gameHTML.querySelector(
       "#discardCardHTML"
@@ -41,13 +45,29 @@ export class Game {
     console.log(this.discardCard);
     this.initializePlayers(gameStartData.players);
 
-    this.displayLocalPlayerHand();
-    this.displayDiscardCard();
 
-    this.displayCurrentPlayerName(this.getCurrentPlayerClass());
+    this.updateGame()
+
+
+    socket.on('cardPlayed', this.handleCardPlayed)
 
     this.displayGame();
   }
+
+  /* Tools */
+
+  displayGame = () => {
+    this.gameHTML.classList.remove("hidden");
+  };
+
+  updateGame = () => {
+    this.displayDiscardCard();
+    this.displayLocalPlayerHand();
+    this.displayCurrentPlayerName(this.getCurrentPlayerClass())
+  }
+
+
+  /* Initialize players */
 
   initializePlayers = (players: any) => {
     console.log(players.length);
@@ -72,7 +92,9 @@ export class Game {
     }
   };
 
-  // Init card
+
+  /* Init card */
+
   initCard = (card: any, index?: number) => {
     let cardHTMLClone = this.cardHTML.cloneNode(true) as HTMLElement;
     cardHTMLClone.innerHTML = "";
@@ -88,7 +110,10 @@ export class Game {
     cardValueHTMLClone.innerText = card.value;
     cardHTMLClone.appendChild(cardValueHTMLClone);
 
-    return new Card(card.color, String(card.value), cardHTMLClone, index);
+    cardHTMLClone.addEventListener('cardClicked', this.onCardClicked as EventListener)
+
+
+    return new Card(card, card.color, String(card.value), cardHTMLClone, index);
   };
 
   displayLocalPlayerHand = () => {
@@ -107,10 +132,6 @@ export class Game {
     this.discardCardHTML.appendChild(this.discardCard.html);
   };
 
-  displayGame = () => {
-    this.gameHTML.classList.remove("hidden");
-  };
-
   getCurrentPlayerClass = () => {
     return this.playersList[this.currentPlayer];
   };
@@ -119,11 +140,24 @@ export class Game {
     this.currentPlayerIndicatorHTML.innerText = "";
     let message: string;
     if (currentPlayer.isLocalPlayer) {
-      message = `It is ${currentPlayer.username}'s (you) turn`;
+      message = `It is ${currentPlayer.username}'s (your) turn`;
     } else {
       message = `It is ${currentPlayer.username}'s turn`;
     }
     this.currentPlayerIndicatorHTML.innerText = message;
-
   };
+
+  
+  /* Callback functions */
+
+  handleCardPlayed = (args: any) => {
+    console.log("card", args.card,"currentP", args.currentPlayer, "previousP",args.previousPlayer, "pile", args.discardPile)
+  }
+
+  onCardClicked = (event: CustomEvent<any>) => {
+    const card = event.detail;
+    console.log('clicked card', card)
+    this.socket.emit('playCard', {card})
+    console.log('Socket emitted playCard')
+  }
 }
