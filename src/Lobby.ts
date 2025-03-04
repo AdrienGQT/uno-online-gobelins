@@ -17,7 +17,6 @@ export class Lobby {
   username: string | null = null;
   playerInRoom: boolean = false;
   playerReady: boolean = false;
-  playersList = [];
 
   constructor(socket: Socket) {
     this.socket = socket;
@@ -55,7 +54,6 @@ export class Lobby {
     // Listen to server events
     this.socket.on("joinGameStatus", this.handleJoinGameStatus);
     this.socket.on("updatePlayers", this.handleUpdatePlayers);
-    this.socket.on('gameStart', this.handleGameStart)
   }
 
   /* Tools */
@@ -139,7 +137,7 @@ export class Lobby {
     }
   };
 
-  handleGameStart = (back: any) => {
-    console.log(back)
+  destroy = () => {
+    this.lobbyHTML.classList.add('hidden')
   }
 }
