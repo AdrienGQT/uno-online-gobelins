@@ -8,8 +8,9 @@ export class Game {
   localPlayerHandHTML: HTMLElement;
   cardHTML: HTMLLIElement;
   cardValueHTML: HTMLElement;
+  currentPlayerIndicatorHTML: HTMLElement;
 
-  localPlayerId: string;
+  socketId: string;
   localPlayer: Player | null = null;
   currentPlayer: number;
   discardCard: Card;
@@ -30,15 +31,20 @@ export class Game {
     this.cardValueHTML = this.localPlayerHandHTML.querySelector(
       "#cardValueHTML"
     ) as HTMLElement;
+    this.currentPlayerIndicatorHTML = this.gameHTML.querySelector(
+      "#currentPlayerIndicatorHTML"
+    ) as HTMLElement;
 
-    this.localPlayerId = socket.id!;
+    this.socketId = socket.id!;
     this.currentPlayer = gameStartData.currentPlayer;
     this.discardCard = this.initCard(gameStartData.discardPile[0]);
     console.log(this.discardCard);
     this.initializePlayers(gameStartData.players);
 
     this.displayLocalPlayerHand();
-    this.displayDiscardCard()
+    this.displayDiscardCard();
+
+    this.displayCurrentPlayerName(this.getCurrentPlayerClass());
 
     this.displayGame();
   }
@@ -48,7 +54,7 @@ export class Game {
     for (let i = 0; i < players.length; i++) {
       const player = players[i];
       let isLocalPlayer = false;
-      if (player.id === this.localPlayerId) {
+      if (player.id === this.socketId) {
         isLocalPlayer = true;
       }
       const playerClass = new Player(
@@ -63,12 +69,11 @@ export class Game {
       if (isLocalPlayer) {
         this.localPlayer = playerClass;
       }
-      //   console.log(player.hand);
     }
   };
 
   // Init card
-  initCard = (card: any) => {
+  initCard = (card: any, index?: number) => {
     let cardHTMLClone = this.cardHTML.cloneNode(true) as HTMLElement;
     cardHTMLClone.innerHTML = "";
 
@@ -83,24 +88,42 @@ export class Game {
     cardValueHTMLClone.innerText = card.value;
     cardHTMLClone.appendChild(cardValueHTMLClone);
 
-    return new Card(card.color, String(card.value), cardHTMLClone);
+    return new Card(card.color, String(card.value), cardHTMLClone, index);
   };
 
   displayLocalPlayerHand = () => {
     this.localPlayerHandHTML.innerHTML = "";
+    let cardIndex = 1;
     for (let card of this.localPlayer!.hand) {
-      let initializedCard = this.initCard(card);
+      let initializedCard = this.initCard(card, cardIndex);
       this.localPlayer?.cards.push(initializedCard);
       this.localPlayerHandHTML.appendChild(initializedCard.html);
+      cardIndex++;
     }
   };
 
   displayDiscardCard = () => {
     this.discardCardHTML.innerHTML = "";
-    this.discardCardHTML.appendChild(this.discardCard.html)
+    this.discardCardHTML.appendChild(this.discardCard.html);
   };
 
   displayGame = () => {
     this.gameHTML.classList.remove("hidden");
+  };
+
+  getCurrentPlayerClass = () => {
+    return this.playersList[this.currentPlayer];
+  };
+
+  displayCurrentPlayerName = (currentPlayer: Player) => {
+    this.currentPlayerIndicatorHTML.innerText = "";
+    let message: string;
+    if (currentPlayer.isLocalPlayer) {
+      message = `It is ${currentPlayer.username}'s (you) turn`;
+    } else {
+      message = `It is ${currentPlayer.username}'s turn`;
+    }
+    this.currentPlayerIndicatorHTML.innerText = message;
+
   };
 }

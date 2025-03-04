@@ -41,19 +41,35 @@
         </form>
       </div>
 
+      <!-- Game container -->
+
       <div id="gameHTML" class="w-full h-full relative hidden">
+        <div class="w-fit h-fit flex bg-gray-100 p-4 absolute top-2 left-2 rounded-md">
+          <p id="currentPlayerIndicatorHTML">Adrienternet</p>
+        </div>
         <div class="w-full h-fit flex justify-center">
-        <div id="discardCardHTML" class="bg-gray-100 p-4 rounded-2xl flex flex-wrap"></div>
+          <div
+            id="discardCardHTML"
+            class="bg-gray-100 p-4 rounded-2xl flex flex-wrap"
+          ></div>
         </div>
         <div
           class="absolute bottom-0 left-0 w-full flex justify-center h-fit mb-2"
         >
-          <ul id="localPlayerHandHTML" class="bg-gray-100 p-4 w-8/10 rounded-2xl flex -space-x-24">
+          <ul
+            id="localPlayerHandHTML"
+            class="bg-gray-100 p-4 w-8/10 rounded-2xl flex -space-x-24"
+          >
             <li
               id="cardHTML"
-              class="card transition-all h-60 w-50 rounded-xl border-8 border-white box-border p-2 list-none hover:-translate-y-32"
+              class="card transition-all h-60 w-50 rounded-xl border-8 border-white box-border p-2 list-none hover:-translate-y-16"
             >
-              <p id="cardValueHTML" class="text-white bg-black text-xl font-bold">cardValue</p>
+              <p
+                id="cardValueHTML"
+                class="text-white bg-black text-xl font-bold"
+              >
+                cardValue
+              </p>
             </li>
           </ul>
         </div>
@@ -61,7 +77,7 @@
 
       <!-- Players display -->
       <div
-        class="w-xs bg-gray-100 p-4 rounded-md box-border flex flex-col gap-2 h-fit absolute top-2 right-2"
+        class="w-xs bg-gray-100 p-4 rounded-md box-border flex flex-col gap-2 h-fit absolute top-2 right-2 z-50"
       >
         <p class="text-lg font-medium">Players in lobby :</p>
         <ul id="playersList" class="flex flex-col gap-2">
