@@ -46,13 +46,16 @@ export class Lobby {
     this.playerStatusHTML = this.playerHTML.querySelector(
       "#playerStatus"
     ) as HTMLLIElement;
-    this.playersListHTML.innerHTML = ""
+    this.playersListHTML.innerHTML = "";
 
+    // Listen to HTML events
     this.joinButton.addEventListener("click", this.joinRequest);
     this.readyButton.addEventListener("click", this.readyRequest);
 
-    this.setJoinGameStatus();
-    this.setUpdatePlayers();
+    // Listen to server events
+    this.socket.on("joinGameStatus", this.handleJoinGameStatus);
+    this.socket.on("updatePlayers", this.handleUpdatePlayers);
+    this.socket.on('gameStart', this.handleGameStart)
   }
 
   /* Tools */
@@ -83,35 +86,33 @@ export class Lobby {
 
   /* Server listeners */
 
-  setJoinGameStatus = () => {
-    this.socket.on("joinGameStatus", (back) => {
-      if (back) {
-        console.log(back.message);
-        this.playerInRoom = true;
-        this.joinButton.disabled = true;
-        this.readyButton.disabled = false;
-      } else {
-        console.log("An error occured while trying to join the room.");
-      }
-    });
+  handleJoinGameStatus = (back: any) => {
+    if (back) {
+      console.log(back.message);
+      this.playerInRoom = true;
+      this.joinButton.disabled = true;
+      this.readyButton.disabled = false;
+    } else {
+      console.log("An error occured while trying to join the room.");
+    }
   };
 
-  setUpdatePlayers = () => {
-    this.socket.on("updatePlayers", (back) => {
-      console.log("Players connected :");
-      if (back) {
-        this.handleUpdatePlayers(back);
-      } else {
-        console.log("An error occured while trying to get players list.");
-      }
-    });
+  handleUpdatePlayers = (back: object) => {
+    console.log("Players connected :");
+    if (back) {
+      this.displayPlayers(back);
+    } else {
+      console.log("An error occured while trying to get players list.");
+    }
   };
 
-  handleUpdatePlayers = (users: object) => {
+  displayPlayers = (users: object) => {
     console.log(users);
     this.playersListHTML.innerHTML = "";
     for (let user of Object.values(users)) {
       const playerHTMLClone = this.playerHTML.cloneNode(true) as HTMLLIElement;
+      playerHTMLClone.innerHTML = "";
+
       const playerNameHTMLClone = this.playerNameHTML.cloneNode(
         true
       ) as HTMLElement;
@@ -137,4 +138,8 @@ export class Lobby {
       }
     }
   };
+
+  handleGameStart = (back: any) => {
+    console.log(back)
+  }
 }

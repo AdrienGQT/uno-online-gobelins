@@ -8,43 +8,44 @@
     <link rel="stylesheet" href="src/style.css" />
   </head>
   <body>
-    <div class="lobby__container">
-      <div class="lobby" id="lobby">
-        <form class="lobbyForm">
-          <img src="uno_logo.svg" alt="" class="lobby__logo" />
-
-          <div class="lobbyForm__up">
+    <div class="w-full h-screen flex justify-center items-center">
+      <div class="flex gap-8" id="lobby">
+        <form class="flex flex-col gap-4 w-sm">
+          <img src="uno_logo.svg" alt="" class="w-full" />
+          <div class="flex gap-2 box-border">
             <input
               type="text"
               name="username"
               id="usernameInput"
-              class="lobbyForm__username"
+              class="w-64 p-4 box-border bg-gray-100 rounded-md hover:bg-gray-200"
               placeholder="Username"
             />
-            <button name="join" id="joinButton" class="lobbyForm__join">
-              Join game
+            <button
+              name="join"
+              id="joinButton"
+              class="bg-gray-100 rounded-md flex-grow p-4 box-border hover:bg-gray-200 cursor-pointer disabled:text-gray-400 disabled:bg-gray-50 disabled:cursor-default"
+            >
+              Join lobby
             </button>
-            <h1 class="">
-              Hello
-            </h1>
           </div>
           <button
             name="ready"
             id="readyButton"
             disabled="disabled"
-            class="lobbyForm__ready"
+            class="bg-yellow-300 rounded-md flex-grow p-4 box-border hover:bg-yellow-400 cursor-pointer disabled:text-gray-400 disabled:bg-gray-50 disabled:cursor-default"
           >
-            Ready
+            Let's go !
           </button>
         </form>
-        <div class="playersList__container">
-          <p>Players in lobby</p>
-          <ul id="playersList" class="playersList">
-            <li id="player">
+        <div class="w-xs bg-gray-100 p-4 rounded-md box-border flex flex-col gap-2">
+          <p class="text-lg font-medium">Players in lobby :</p>
+          <ul id="playersList" class="flex flex-col gap-2">
+            <li id="player" class="flex justify-between">
               <div class="playerName" id="playerName"></div>
               <div class="playerStatus" id="playerStatus"></div>
             </li>
           </ul>
+          <p id="gameStatus"></p>
         </div>
       </div>
     </div>
