@@ -1,36 +1,49 @@
+import { gsap } from "gsap";
+import { Draggable } from "gsap/Draggable";
+gsap.registerPlugin(Draggable);
+
 export class Card {
   defaultCard: object;
+  id: number;
   color: string;
   value: string;
   html: HTMLElement;
-  cardIndex: number;
+  inHandIndex: number | null= null;
   isPlayable: boolean;
   constructor(
+    id: number,
     defaultCard: object,
     color: string,
     value: string,
     html: HTMLElement,
-    cardIndex?: number
+    inHandIndex?: number
   ) {
+    // card
+    // card id
+    // card color
+    // card value
+    
     this.defaultCard = defaultCard;
+    this.id = id;
     this.color = color;
     this.value = value;
     this.html = html;
-    if (cardIndex) {
+    if (inHandIndex) {
       this.isPlayable = true;
-      this.cardIndex = cardIndex;
+      this.inHandIndex = inHandIndex;
+      this.html.style.zIndex = String(this.inHandIndex + 1);
       this.html.addEventListener("click", this.clickCard);
     } else {
       this.isPlayable = false;
-      this.cardIndex = 1;
+      this.html.style.zIndex = "1";
+
       this.removeCardHoverEffect();
     }
-    this.setZIndex();
   }
 
-  setZIndex = () => {
-    this.html.style.zIndex = String(this.cardIndex + 1);
-  };
+  // setZIndex = () => {
+  //   this.html.style.zIndex = String(this.cardIndex + 1);
+  // };
 
   removeCardHoverEffect = () => {
     this.html.classList.remove("hover:-translate-y-16");

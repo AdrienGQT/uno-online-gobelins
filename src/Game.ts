@@ -1,3 +1,7 @@
+import { gsap } from "gsap";
+import { Draggable } from "gsap/Draggable";
+gsap.registerPlugin(Draggable);
+
 import { Socket } from "socket.io-client";
 import { Player } from "./Player";
 import { Card } from "./Card";
@@ -99,7 +103,7 @@ export class Game {
 
   /* Init card */
 
-  initCard = (card: any, index?: number) => {
+  initCard = (card: any, inHandIndex?: number) => {
     let cardHTMLClone = this.cardHTML.cloneNode(true) as HTMLElement;
     cardHTMLClone.innerHTML = "";
 
@@ -144,7 +148,7 @@ export class Game {
       this.onCardClicked as EventListener
     );
 
-    return new Card(card, card.color, String(card.value), cardHTMLClone, index);
+    return new Card(card.id, card, card.color, String(card.value), cardHTMLClone, inHandIndex);
   };
 
   displayLocalPlayerHand = (currentPlayer: Player) => {
