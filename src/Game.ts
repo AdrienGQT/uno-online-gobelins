@@ -66,9 +66,10 @@ export class Game {
   };
 
   updateGame = () => {
+    let currentPlayerClass = this.getCurrentPlayerClass()
     this.displayDiscardCard();
-    this.displayLocalPlayerHand();
-    this.displayCurrentPlayerName(this.getCurrentPlayerClass());
+    this.displayLocalPlayerHand(currentPlayerClass);
+    this.displayCurrentPlayerName(currentPlayerClass);
   };
 
   /* Initialize players */
@@ -102,16 +103,41 @@ export class Game {
     let cardHTMLClone = this.cardHTML.cloneNode(true) as HTMLElement;
     cardHTMLClone.innerHTML = "";
 
-    let color = "black";
+    let color = "bg-gray-900";
     console.log(card.color);
     if (card.color !== "wild") {
-      color = card.color;
+      color = `bg-${card.color}-500`;
     }
-    cardHTMLClone.style.backgroundColor = `${color}`;
 
-    let cardValueHTMLClone = this.cardValueHTML.cloneNode(true) as HTMLElement;
-    cardValueHTMLClone.innerText = card.value;
-    cardHTMLClone.appendChild(cardValueHTMLClone);
+    let cardValueHTMLTop = this.cardValueHTML.cloneNode(true) as HTMLElement;
+    cardValueHTMLTop.innerText = card.value;
+    let cardValueHTMLBottom = cardValueHTMLTop.cloneNode(true) as HTMLElement
+    let cardValueHTMLCenter = cardValueHTMLTop.cloneNode(true) as HTMLElement
+
+    // Set top number style
+    cardValueHTMLTop.classList.add('top-2')
+    cardValueHTMLTop.classList.add('left-2')
+
+    // Set bottom number style
+    cardValueHTMLBottom.classList.add("rotate-180")
+    cardValueHTMLBottom.classList.add('bottom-2')
+    cardValueHTMLBottom.classList.add('right-2')
+
+    // Set center number style
+    cardValueHTMLCenter.classList.remove('absolute')
+    cardValueHTMLCenter.classList.remove('text-4xl')
+    cardValueHTMLCenter.classList.add('flex')
+    cardValueHTMLCenter.classList.add('h-full')
+    cardValueHTMLCenter.classList.add('w-full')
+    cardValueHTMLCenter.classList.add('justify-center')
+    cardValueHTMLCenter.classList.add('items-center')
+    cardValueHTMLCenter.classList.add('text-6xl')
+
+    cardHTMLClone.classList.add(color)
+
+    cardHTMLClone.appendChild(cardValueHTMLTop);
+    cardHTMLClone.appendChild(cardValueHTMLBottom);
+    cardHTMLClone.appendChild(cardValueHTMLCenter);
 
     cardHTMLClone.addEventListener(
       "cardClicked",
@@ -121,7 +147,7 @@ export class Game {
     return new Card(card, card.color, String(card.value), cardHTMLClone, index);
   };
 
-  displayLocalPlayerHand = () => {
+  displayLocalPlayerHand = (currentPlayer: Player) => {
     this.localPlayerHandHTML.innerHTML = "";
     let cardIndex = 1;
     for (let card of this.localPlayer!.hand) {
@@ -129,6 +155,12 @@ export class Game {
       this.localPlayer?.cards.push(initializedCard);
       this.localPlayerHandHTML.appendChild(initializedCard.html);
       cardIndex++;
+    }
+    if(currentPlayer.isLocalPlayer){
+      this.localPlayerHandHTML.classList.remove('translate-y-32')
+    }else{
+      this.localPlayerHandHTML.classList.add('translate-y-32')
+
     }
   };
 

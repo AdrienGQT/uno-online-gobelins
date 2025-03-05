@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,25 +7,25 @@
     <title>Uno Online Gobelins</title>
     <link rel="stylesheet" href="src/style.css" />
   </head>
-  <body class="w-screen h-screen">
+  <body class="h-screen w-screen">
     <!-- Container -->
-    <div class="w-full h-full flex justify-center items-center gap-8 relative">
+    <div class="relative flex h-full w-full items-center justify-center gap-8">
       <!-- Lobby container -->
-      <div class="flex gap-8 h-fit" id="lobby">
-        <form class="flex flex-col gap-4 w-sm">
+      <div class="flex h-fit gap-8" id="lobby">
+        <form class="flex w-sm flex-col gap-4">
           <img src="uno_logo.svg" alt="" class="w-full" />
-          <div class="flex gap-2 box-border">
+          <div class="box-border flex gap-2">
             <input
               type="text"
               name="username"
               id="usernameInput"
-              class="w-64 p-4 box-border bg-gray-100 rounded-md hover:bg-gray-200"
+              class="box-border w-64 rounded-md bg-gray-100 p-4 hover:bg-gray-200"
               placeholder="Username"
             />
             <button
               name="join"
               id="joinButton"
-              class="bg-gray-100 rounded-md flex-grow p-4 box-border hover:bg-gray-200 cursor-pointer disabled:text-gray-400 disabled:bg-gray-50 disabled:cursor-default"
+              class="box-border flex-grow cursor-pointer rounded-md bg-gray-100 p-4 hover:bg-gray-200 disabled:cursor-default disabled:bg-gray-50 disabled:text-gray-400"
             >
               Join lobby
             </button>
@@ -34,7 +34,7 @@
             name="ready"
             id="readyButton"
             disabled="disabled"
-            class="bg-yellow-300 rounded-md flex-grow p-4 box-border hover:bg-yellow-400 cursor-pointer disabled:text-gray-400 disabled:bg-gray-50 disabled:cursor-default"
+            class="box-border flex-grow cursor-pointer rounded-md bg-yellow-300 p-4 hover:bg-yellow-400 disabled:cursor-default disabled:bg-gray-50 disabled:text-gray-400"
           >
             Let's go !
           </button>
@@ -43,44 +43,47 @@
 
       <!-- Game container -->
 
-      <div id="gameHTML" class="w-full h-full relative hidden">
+      <div id="gameHTML" class="relative hidden h-full w-full overflow-hidden">
         <div
-          class="w-fit h-fit flex bg-gray-100 p-4 absolute top-2 left-2 rounded-md"
+          class="absolute top-2 left-2 flex h-fit w-fit rounded-md bg-gray-100 p-4"
         >
           <p id="currentPlayerIndicatorHTML">Adrienternet</p>
         </div>
 
-        <div class="w-full h-fit flex justify-center">
+        <!-- Table -->
+        <div class="flex h-fit w-full justify-center gap-8 absolute top-40">
           <!-- Card stack -->
-          <div class="bg-gray-100 p-4 rounded-2xl flex flex-wrap">
+          <div class="flex flex-wrap rounded-2xl bg-gray-100 p-4">
             <li
               id="cardStackHTML"
-              class="card transition-all h-60 w-50 min-w-50 rounded-xl border-8 border-white box-border p-2 list-none bg-pink-500 cursor-pointer shadow hover:-translate-y-16 hover:shadow-xl"
+              class="card flex justify-center items-center box-border h-60 w-50 min-w-50 cursor-pointer list-none rounded-xl border-8 border-white bg-gray-900 p-2 shadow transition-all hover:shadow-xl"
             >
-              <p class="text-white bg-black text-xl font-bold">UNO</p>
+              <img src="uno_logo.svg" alt="" />
             </li>
           </div>
           <!-- Discard pile -->
           <div
             id="discardCardHTML"
-            class="bg-gray-100 p-4 rounded-2xl flex flex-wrap"
+            class="flex flex-wrap rounded-2xl bg-gray-100 p-4"
           ></div>
         </div>
 
+
+        <!-- Player's hand -->
         <div
-          class="absolute bottom-0 left-0 w-full flex justify-center h-fit mb-2"
+          class="absolute bottom-2 left-0 mb-2 flex h-fit w-full justify-center"
         >
           <ul
             id="localPlayerHandHTML"
-            class="bg-gray-100 p-4 w-8/10 rounded-2xl flex -space-x-24"
+            class="flex transition-all w-8/10 -space-x-24 rounded-2xl bg-gray-100 p-4 translate-y-32"
           >
             <li
               id="cardHTML"
-              class="card transition-all h-60 w-50 min-w-50 rounded-xl border-8 border-white box-border p-2 list-none cursor-pointer shadow hover:-translate-y-16 hover:shadow-xl"
+              class="card relative box-border h-60 w-50 min-w-50 cursor-pointer list-none rounded-xl border-8 border-white p-2 shadow transition-all hover:-translate-y-16 hover:shadow-xl"
             >
               <p
                 id="cardValueHTML"
-                class="text-white bg-black text-xl font-bold"
+                class="absolute h-fit w-fit text-4xl font-bold text-white drop-shadow-sm first-letter:capitalize"
               >
                 cardValue
               </p>
@@ -91,7 +94,7 @@
 
       <!-- Players display -->
       <div
-        class="w-xs bg-gray-100 p-4 rounded-md box-border flex flex-col gap-2 h-fit absolute top-2 right-2 z-50"
+        class="absolute top-2 right-2 z-50 box-border flex h-fit w-xs flex-col gap-2 rounded-md bg-gray-100 p-4"
       >
         <p class="text-lg font-medium">Players in lobby :</p>
         <ul id="playersList" class="flex flex-col gap-2">
