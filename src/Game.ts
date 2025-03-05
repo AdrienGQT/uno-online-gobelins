@@ -15,13 +15,13 @@ export class Game {
   localPlayerHandHTML: HTMLElement;
   cardHTML: HTMLLIElement;
   cardValueHTML: HTMLElement;
-  currentPlayerIndicatorHTML: HTMLElement;
 
   socketId: string;
   localPlayer: Player | null = null;
   currentPlayer: number;
   discardCard: Card;
   playersList: Array<Player> = [];
+  currentPlayerIndicatorHTML: HTMLElement;
   currentTurn: number = 0;
 
   constructor(gameStartData: any, socket: Socket) {
@@ -49,8 +49,7 @@ export class Game {
 
     this.socketId = socket.id!;
     this.currentPlayer = gameStartData.currentPlayer;
-    this.discardCard = this.initCard(gameStartData.discardPile[0]);
-    console.log(this.discardCard);
+    this.discardCard = new Card(gameStartData.discardPile[0], this.cardHTML.cloneNode(true) as HTMLLIElement, this.cardValueHTML.cloneNode(true) as HTMLElement);
     this.initializePlayers(gameStartData.players);
 
     this.updateGame();
@@ -103,64 +102,29 @@ export class Game {
 
   /* Init card */
 
-  initCard = (card: any, inHandIndex?: number) => {
-    let cardHTMLClone = this.cardHTML.cloneNode(true) as HTMLElement;
-    cardHTMLClone.innerHTML = "";
+  // initCard = (card: any, inHandIndex?: number) => {
+    
 
-    let color = "bg-gray-900";
-    console.log(card.color);
-    if (card.color !== "wild") {
-      color = `bg-${card.color}-500`;
-    }
-
-    let cardValueHTMLTop = this.cardValueHTML.cloneNode(true) as HTMLElement;
-    cardValueHTMLTop.innerText = card.value;
-    let cardValueHTMLBottom = cardValueHTMLTop.cloneNode(true) as HTMLElement
-    let cardValueHTMLCenter = cardValueHTMLTop.cloneNode(true) as HTMLElement
-
-    // Set top number style
-    cardValueHTMLTop.classList.add('top-2')
-    cardValueHTMLTop.classList.add('left-2')
-
-    // Set bottom number style
-    cardValueHTMLBottom.classList.add("rotate-180")
-    cardValueHTMLBottom.classList.add('bottom-2')
-    cardValueHTMLBottom.classList.add('right-2')
-
-    // Set center number style
-    cardValueHTMLCenter.classList.remove('absolute')
-    cardValueHTMLCenter.classList.remove('text-4xl')
-    cardValueHTMLCenter.classList.add('flex')
-    cardValueHTMLCenter.classList.add('h-full')
-    cardValueHTMLCenter.classList.add('w-full')
-    cardValueHTMLCenter.classList.add('justify-center')
-    cardValueHTMLCenter.classList.add('items-center')
-    cardValueHTMLCenter.classList.add('text-6xl')
-
-    cardHTMLClone.classList.add(color)
-
-    cardHTMLClone.appendChild(cardValueHTMLTop);
-    cardHTMLClone.appendChild(cardValueHTMLBottom);
-    cardHTMLClone.appendChild(cardValueHTMLCenter);
-
-    cardHTMLClone.addEventListener(
-      "cardClicked",
-      this.onCardClicked as EventListener
-    );
-
-    return new Card(card.id, card, card.color, String(card.value), cardHTMLClone, inHandIndex);
-  };
+  //   return new Card(card.id, card, card.color, String(card.value), cardHTMLClone, inHandIndex);
+  // };
 
   displayLocalPlayerHand = (currentPlayer: Player) => {
     this.localPlayerHandHTML.innerHTML = "";
     let cardIndex = 1;
+    console.log(this.localPlayer!.hand)
     for (let card of this.localPlayer!.hand) {
-      let initializedCard = this.initCard(card, cardIndex);
+      console.log(card)
+      let initializedCard = new Card(card, this.cardHTML.cloneNode(true) as HTMLLIElement, this.cardValueHTML.cloneNode(true) as HTMLElement, cardIndex);
       this.localPlayer?.cards.push(initializedCard);
-      this.localPlayerHandHTML.appendChild(initializedCard.html);
+      initializedCard.cardHTML.addEventListener(
+        "cardClicked",
+        this.onCardClicked as EventListener,
+      );
+      this.localPlayerHandHTML.appendChild(initializedCard.cardHTML);
       cardIndex++;
     }
     if(currentPlayer.isLocalPlayer){
+      
       this.localPlayerHandHTML.classList.remove('translate-y-32')
     }else{
       this.localPlayerHandHTML.classList.add('translate-y-32')
@@ -170,7 +134,7 @@ export class Game {
 
   displayDiscardCard = () => {
     this.discardCardHTML.innerHTML = "";
-    this.discardCardHTML.appendChild(this.discardCard.html);
+    this.discardCardHTML.appendChild(this.discardCard.cardHTML);
   };
 
   getCurrentPlayerClass = () => {
@@ -192,7 +156,7 @@ export class Game {
 
   handleCardPlayed = (args: any) => {
     this.currentPlayer = args.currentPlayer;
-    this.discardCard = this.initCard(args.card);
+    this.discardCard = new Card(args.card, this.cardHTML.cloneNode(true) as HTMLLIElement, this.cardValueHTML.cloneNode(true) as HTMLElement);
     this.updateGame();
   };
 
