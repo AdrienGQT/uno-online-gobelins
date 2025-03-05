@@ -7,6 +7,7 @@ export class Game {
 
   gameHTML: HTMLElement;
   discardCardHTML: HTMLElement;
+  cardStackHTML: HTMLLIElement;
   localPlayerHandHTML: HTMLElement;
   cardHTML: HTMLLIElement;
   cardValueHTML: HTMLElement;
@@ -26,6 +27,9 @@ export class Game {
     this.discardCardHTML = this.gameHTML.querySelector(
       "#discardCardHTML"
     ) as HTMLElement;
+    this.cardStackHTML = this.gameHTML.querySelector(
+      "#cardStackHTML"
+    ) as HTMLLIElement;
     this.localPlayerHandHTML = this.gameHTML.querySelector(
       "#localPlayerHandHTML"
     ) as HTMLElement;
@@ -47,7 +51,9 @@ export class Game {
 
     this.updateGame();
 
+    this.cardStackHTML.addEventListener('click', this.onDrawCard)
     socket.on("cardPlayed", this.handleCardPlayed);
+    socket.on("cardDrawn", this.handleCardPlayed);
     socket.on("updatePlayers", this.handleUpdatePlayers);
 
     this.displayGame();
@@ -149,20 +155,15 @@ export class Game {
   /* Callback functions */
 
   handleCardPlayed = (args: any) => {
-    console.log(
-      "card",
-      args.card,
-      "currentP",
-      args.currentPlayer,
-      "previousP",
-      args.previousPlayer,
-      "pile",
-      args.discardPile
-    );
     this.currentPlayer = args.currentPlayer;
     this.discardCard = this.initCard(args.card);
     this.updateGame();
   };
+
+  handleCardDraw = (args: any) => {
+    this.currentPlayer = args.currentPlayer
+    this.updateGame()
+  }
 
   handleUpdatePlayers = (args: any) => {
     for (let user of args) {
@@ -171,7 +172,7 @@ export class Game {
           player.hand = user.hand;
         }
     }
-    this.updateGame()
+    this.updateGame();
   };
 
   onCardClicked = (event: CustomEvent<any>) => {
@@ -180,4 +181,8 @@ export class Game {
     this.socket.emit("playCard", { card });
     console.log("Socket emitted playCard");
   };
+
+  onDrawCard = () => {
+    this.socket.emit('drawCard')
+  }
 }

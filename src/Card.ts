@@ -34,6 +34,8 @@ export class Card {
 
   removeCardHoverEffect = () => {
     this.html.classList.remove("hover:-translate-y-16");
+    this.html.classList.remove("hover:shadow-xl");
+    this.html.classList.remove("hover:scale-105");
   };
 
   clickCard = () => {

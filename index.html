@@ -44,15 +44,29 @@
       <!-- Game container -->
 
       <div id="gameHTML" class="w-full h-full relative hidden">
-        <div class="w-fit h-fit flex bg-gray-100 p-4 absolute top-2 left-2 rounded-md">
+        <div
+          class="w-fit h-fit flex bg-gray-100 p-4 absolute top-2 left-2 rounded-md"
+        >
           <p id="currentPlayerIndicatorHTML">Adrienternet</p>
         </div>
+
         <div class="w-full h-fit flex justify-center">
+          <!-- Card stack -->
+          <div class="bg-gray-100 p-4 rounded-2xl flex flex-wrap">
+            <li
+              id="cardStackHTML"
+              class="card transition-all h-60 w-50 min-w-50 rounded-xl border-8 border-white box-border p-2 list-none bg-pink-500 cursor-pointer shadow hover:-translate-y-16 hover:shadow-xl"
+            >
+              <p class="text-white bg-black text-xl font-bold">UNO</p>
+            </li>
+          </div>
+          <!-- Discard pile -->
           <div
             id="discardCardHTML"
             class="bg-gray-100 p-4 rounded-2xl flex flex-wrap"
           ></div>
         </div>
+
         <div
           class="absolute bottom-0 left-0 w-full flex justify-center h-fit mb-2"
         >
@@ -62,7 +76,7 @@
           >
             <li
               id="cardHTML"
-              class="card transition-all h-60 w-50 min-w-50 rounded-xl border-8 border-white box-border p-2 list-none hover:-translate-y-16"
+              class="card transition-all h-60 w-50 min-w-50 rounded-xl border-8 border-white box-border p-2 list-none cursor-pointer shadow hover:-translate-y-16 hover:shadow-xl"
             >
               <p
                 id="cardValueHTML"
