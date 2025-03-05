@@ -4,6 +4,7 @@ export class Card {
   value: string;
   html: HTMLElement;
   cardIndex: number;
+  isPlayable: boolean;
   constructor(
     defaultCard: object,
     color: string,
@@ -16,13 +17,15 @@ export class Card {
     this.value = value;
     this.html = html;
     if (cardIndex) {
+      this.isPlayable = true;
       this.cardIndex = cardIndex;
+      this.html.addEventListener("click", this.clickCard);
     } else {
+      this.isPlayable = false;
       this.cardIndex = 1;
       this.removeCardHoverEffect();
     }
     this.setZIndex();
-    this.html.addEventListener("click", this.clickCard);
   }
 
   setZIndex = () => {
@@ -34,7 +37,7 @@ export class Card {
   };
 
   clickCard = () => {
-    console.log('card clicked')
+    console.log("card clicked");
     const cardClickedEvent = new CustomEvent("cardClicked", {
       detail: this.defaultCard,
     });

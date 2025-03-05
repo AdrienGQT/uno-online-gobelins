@@ -3,7 +3,7 @@ import { Player } from "./Player";
 import { Card } from "./Card";
 
 export class Game {
-  socket: Socket
+  socket: Socket;
 
   gameHTML: HTMLElement;
   discardCardHTML: HTMLElement;
@@ -20,7 +20,7 @@ export class Game {
   currentTurn: number = 0;
 
   constructor(gameStartData: any, socket: Socket) {
-    this.socket = socket
+    this.socket = socket;
 
     this.gameHTML = document.querySelector("#gameHTML") as HTMLElement;
     this.discardCardHTML = this.gameHTML.querySelector(
@@ -45,11 +45,10 @@ export class Game {
     console.log(this.discardCard);
     this.initializePlayers(gameStartData.players);
 
+    this.updateGame();
 
-    this.updateGame()
-
-
-    socket.on('cardPlayed', this.handleCardPlayed)
+    socket.on("cardPlayed", this.handleCardPlayed);
+    socket.on("updatePlayers", this.handleUpdatePlayers);
 
     this.displayGame();
   }
@@ -63,9 +62,8 @@ export class Game {
   updateGame = () => {
     this.displayDiscardCard();
     this.displayLocalPlayerHand();
-    this.displayCurrentPlayerName(this.getCurrentPlayerClass())
-  }
-
+    this.displayCurrentPlayerName(this.getCurrentPlayerClass());
+  };
 
   /* Initialize players */
 
@@ -92,7 +90,6 @@ export class Game {
     }
   };
 
-
   /* Init card */
 
   initCard = (card: any, index?: number) => {
@@ -110,8 +107,10 @@ export class Game {
     cardValueHTMLClone.innerText = card.value;
     cardHTMLClone.appendChild(cardValueHTMLClone);
 
-    cardHTMLClone.addEventListener('cardClicked', this.onCardClicked as EventListener)
-
+    cardHTMLClone.addEventListener(
+      "cardClicked",
+      this.onCardClicked as EventListener
+    );
 
     return new Card(card, card.color, String(card.value), cardHTMLClone, index);
   };
@@ -147,17 +146,38 @@ export class Game {
     this.currentPlayerIndicatorHTML.innerText = message;
   };
 
-  
   /* Callback functions */
 
   handleCardPlayed = (args: any) => {
-    console.log("card", args.card,"currentP", args.currentPlayer, "previousP",args.previousPlayer, "pile", args.discardPile)
-  }
+    console.log(
+      "card",
+      args.card,
+      "currentP",
+      args.currentPlayer,
+      "previousP",
+      args.previousPlayer,
+      "pile",
+      args.discardPile
+    );
+    this.currentPlayer = args.currentPlayer;
+    this.discardCard = this.initCard(args.card);
+    this.updateGame();
+  };
+
+  handleUpdatePlayers = (args: any) => {
+    for (let user of args) {
+      for (let player of this.playersList)
+        if (user.id === player.id) {
+          player.hand = user.hand;
+        }
+    }
+    this.updateGame()
+  };
 
   onCardClicked = (event: CustomEvent<any>) => {
     const card = event.detail;
-    console.log('clicked card', card)
-    this.socket.emit('playCard', {card})
-    console.log('Socket emitted playCard')
-  }
+    console.log("clicked card", card);
+    this.socket.emit("playCard", { card });
+    console.log("Socket emitted playCard");
+  };
 }
