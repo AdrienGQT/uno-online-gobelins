@@ -77,7 +77,8 @@ export class Card {
       this.isPlayable = true;
       this.inHandIndex = this.inHandIndex;
       this.cardHTML.style.zIndex = String(this.inHandIndex + 1);
-      this.cardHTML.addEventListener("click", this.clickCard);
+      this.cardHTML.classList.add('cardDraggable')
+      // this.cardHTML.addEventListener("click", this.clickCard);
     } else {
       this.cardHTML.style.zIndex = "1";
       this.removeCardHoverEffect();
