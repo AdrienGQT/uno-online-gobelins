@@ -15,6 +15,7 @@ export class Game {
   discardCardHTML: HTMLElement;
   cardStackHTML: HTMLLIElement;
   localPlayerHandHTML: HTMLElement;
+  colorSwitchHTML: HTMLElement;
   cardHTML: HTMLLIElement;
   cardValueHTML: HTMLElement;
 
@@ -39,6 +40,9 @@ export class Game {
     this.localPlayerHandHTML = this.gameHTML.querySelector(
       "#localPlayerHandHTML",
     ) as HTMLElement;
+    this.colorSwitchHTML = this.gameHTML.querySelector(
+      "#colorSwitchHTML",
+    ) as HTMLElement;
     this.cardHTML = this.localPlayerHandHTML.querySelector(
       "#cardHTML",
     ) as HTMLLIElement;
@@ -57,6 +61,7 @@ export class Game {
       this.cardValueHTML.cloneNode(true) as HTMLElement,
     );
     this.initializePlayers(gameStartData.players);
+    this.initializeColorChangeButtons();
 
     this.updateGame();
 
@@ -64,6 +69,8 @@ export class Game {
     socket.on("cardPlayed", this.handleCardPlayed);
     socket.on("cardDrawn", this.handleCardPlayed);
     socket.on("updatePlayers", this.handleUpdatePlayers);
+    socket.on("askForColorSwitch", this.handleAskForColorSwitch);
+    socket.on("colorSwitched", this.handleColorSwitched);
 
     this.displayGame();
   }
@@ -79,6 +86,24 @@ export class Game {
     this.displayDiscardCard();
     this.displayLocalPlayerHand(currentPlayerClass);
     this.displayCurrentPlayerName(currentPlayerClass);
+  };
+
+  /* Initialize color change buttons*/
+
+  initializeColorChangeButtons = () => {
+    const colorSwitchButtons =
+      this.gameHTML.querySelectorAll(".colorSwitchButton");
+    for (let button of colorSwitchButtons) {
+      button.addEventListener("click", this.switchColor);
+    }
+  };
+
+  switchColor = (e: any) => {
+    console.log(e);
+    if (e.target) {
+      let color = e.target.id;
+      this.socket.emit("colorSwitch", color);
+    }
   };
 
   /* Initialize players */
@@ -109,7 +134,7 @@ export class Game {
   displayLocalPlayerHand = (currentPlayer: Player) => {
     this.localPlayerHandHTML.innerHTML = "";
     let cardIndex = 1;
-    console.log(this.localPlayer!.hand);
+    // console.log(this.localPlayer!.hand);
     for (let card of this.localPlayer!.hand) {
       console.log(card);
       let initializedCard = new Card(
@@ -130,14 +155,14 @@ export class Game {
         this.localPlayerHandHTML.classList.remove("translate-y-32");
         initializedCard.cardHTML.classList.remove("hover:-translate-y-16");
 
-        // const gameHTMLRef = this.gameHTML;
+
+        
         Draggable.create(initializedCard.cardHTML, {
-          // bounds: gameHTMLRef,
           onDragStart: function () {
-                this.startX = this.x;
-                this.startY = this.y;
-                this.target.classList.remove("transition-all");
-              },
+            this.startX = this.x;
+            this.startY = this.y;
+            this.target.classList.remove("transition-all");
+          },
           onDrag: function () {
             if (this.y < -300) {
               this.target.classList.remove("rounded-xl");
@@ -150,10 +175,9 @@ export class Game {
             this.deltaY = this.y - this.startY;
 
             if (this.deltaY < -300) {
-              console.log("played");
               gsap.set(this.target, {
                 x: this.startX,
-                y: this.startY
+                y: this.startY,
               });
               initializedCard.clickCard();
             } else {
@@ -168,9 +192,10 @@ export class Game {
                 },
               });
             }
-            console.log(this.deltaY);
           },
         });
+
+
       } else {
         this.localPlayerHandHTML.classList.add("translate-y-32");
         initializedCard.cardHTML.classList.add("hover:-translate-y-16");
@@ -223,6 +248,19 @@ export class Game {
         }
     }
     this.updateGame();
+  };
+
+  handleAskForColorSwitch = () => {
+    this.colorSwitchHTML.classList.add('flex')
+    this.colorSwitchHTML.classList.remove('hidden')
+  };
+
+  handleColorSwitched = (card: any) => {
+    let newDiscardCard = new Card(card, this.cardHTML, this.cardValueHTML);
+    this.discardCard = newDiscardCard;
+    this.displayDiscardCard();
+    this.colorSwitchHTML.classList.remove('flex')
+    this.colorSwitchHTML.classList.add('hidden')
   };
 
   onCardClicked = (event: CustomEvent<any>) => {

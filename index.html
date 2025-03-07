@@ -51,12 +51,12 @@
         </div>
 
         <!-- Table -->
-        <div class="flex h-fit w-full justify-center gap-8 absolute top-40">
+        <div class="absolute top-40 flex h-fit w-full justify-center gap-8">
           <!-- Card stack -->
           <div class="flex flex-wrap rounded-2xl bg-gray-100 p-4">
             <li
               id="cardStackHTML"
-              class="card flex justify-center items-center box-border h-60 w-50 min-w-50 cursor-pointer list-none rounded-xl border-8 border-white bg-gray-900 p-2 shadow transition-all hover:shadow-xl"
+              class="card box-border flex h-60 w-50 min-w-50 cursor-pointer list-none items-center justify-center rounded-xl border-8 border-white bg-gray-900 p-2 shadow transition-all hover:shadow-xl"
             >
               <img src="uno_logo.svg" alt="" />
             </li>
@@ -66,16 +66,49 @@
             id="discardCardHTML"
             class="flex flex-wrap rounded-2xl bg-gray-100 p-4"
           ></div>
+          <!-- Color selector -->
+          <div
+          id="colorSwitchHTML"
+            class="box-border hidden h-full w-72 flex-wrap justify-between gap-2 rounded-xl bg-gray-100 p-4"
+          >
+            <button
+              name="blueSwitch"
+              id="blue"
+              class="colorSwitchButton box-border min-w-32 flex-grow cursor-pointer rounded-md bg-blue-400 p-4 hover:bg-blue-500 disabled:cursor-default"
+            >
+              Blue
+            </button>
+            <button
+              name="greenSwitch"
+              id="green"
+              class="colorSwitchButton box-border min-w-32 flex-grow cursor-pointer rounded-md bg-green-400 p-4 hover:bg-green-500 disabled:cursor-default"
+            >
+              Green
+            </button>
+            <button
+              name="yellowSwitch"
+              id="yellow"
+              class="colorSwitchButton box-border min-w-32 flex-grow cursor-pointer rounded-md bg-yellow-400 p-4 hover:bg-yellow-500 disabled:cursor-default"
+            >
+              Yellow
+            </button>
+            <button
+              name="redSwitch"
+              id="red"
+              class="colorSwitchButton box-border min-w-32 flex-grow cursor-pointer rounded-md bg-red-400 p-4 hover:bg-red-500 disabled:cursor-default"
+            >
+              Red
+            </button>
+          </div>
         </div>
-
 
         <!-- Player's hand -->
         <div
-          class="absolute bottom-2 left-0 mb-2 flex h-fit w-full justify-center"
+          class="absolute bottom-2 left-0 mb-2 flex h-fit w-full flex-col items-center gap-8"
         >
           <ul
             id="localPlayerHandHTML"
-            class="flex transition-all w-8/10 -space-x-24 rounded-2xl bg-gray-100 p-4 translate-y-32"
+            class="flex w-8/10 translate-y-32 -space-x-24 rounded-2xl bg-gray-100 p-4 transition-all"
           >
             <li
               id="cardHTML"

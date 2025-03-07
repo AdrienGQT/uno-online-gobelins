@@ -33,6 +33,10 @@ export class Card {
   stylizeCard = () => {
     this.cardHTML.innerHTML = "";
     this.cardValueHTML.removeAttribute('id')
+    this.cardHTML.classList.remove('bg-red-500')
+    this.cardHTML.classList.remove('bg-blue-500')
+    this.cardHTML.classList.remove('bg-green-500')
+    this.cardHTML.classList.remove('bg-yellow-500')
 
 
     let color = "bg-gray-900";
